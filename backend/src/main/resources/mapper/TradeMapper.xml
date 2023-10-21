@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fighter3.mapper.tradeMapper">
+
+    <resultMap id="ApplyMap" type="ApplyItem"></resultMap>
+
+    <select id="countAppliedItem" resultType="java.lang.Integer">
+       SELECT count(*) from trade 
+            left join product on trade.tpid=product.pid 
+            left join customer on trade.tfcid = customer.cid 
+       where 
+            tpid in 
+                (SELECT pid from product where pcid = #{pcid}) 
+            and trade.tcon=0
+    </select>
+
+    <select id="selectAppliedPage" resultMap="ApplyMap">
+        SELECT tid,cname,tpid,pname,message,
+        CONCAT("邮箱：",email,"_qq：",qq,"_微信：",wechat,"_电话：",phone) as contact
+            from trade 
+            left join product on trade.tpid=product.pid 
+            left join customer on trade.tfcid = customer.cid 
+            where tpid in 
+                (SELECT pid from product where pcid = #{pcid}) 
+                and trade.tcon=0
+                <if test="keyword != null and keyword != ''">
+                    AND pname LIKE CONCAT('%', #{keyword}, '%')
+                </if>
+            LIMIT #{pageSize} OFFSET #{num}
+    </select>
+
+    <select id="countApplyItem" resultType="java.lang.Integer">
+       SELECT count(*) from trade 
+       where 
+            tfcid = #{pcid}
+    </select>
+
+    <select id="selectApplyPage" resultMap="ApplyMap">
+        SELECT tid,cname,tpid,pname,message,tcon,type
+            from trade 
+            left join product on trade.tpid=product.pid 
+            left join customer on trade.tfcid = customer.cid 
+            where tfcid = #{pcid} 
+                <if test="keyword != null and keyword != ''">
+                    AND pname LIKE CONCAT('%', #{keyword}, '%')
+                </if>
+            LIMIT #{pageSize} OFFSET #{num}
+    </select>
+
+    <update id="updateTcon">
+        UPDATE  trade SET tcon = 1 where tid = #{id}
+    </update>
+
+    <update id="updateTconBatch" parameterType="java.util.List">
+        UPDATE trade SET tcon = 1 WHERE tid IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <select id="getCusRcon" resultType="Customer">
+       SELECT * from customer where  cid = #{id}
+    </select>
+
+
+    <select id="countLines" resultType="java.lang.Integer">
+       SELECT count(*) from trade 
+       where 
+            tpid = #{tpid} and  tfcid = #{tfcid} 
+    </select>
+
+
+</mapper>

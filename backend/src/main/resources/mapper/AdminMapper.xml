@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fighter3.mapper.adminMapper">
+    <resultMap id="CustomerMap" type="Customer"></resultMap>
+    <resultMap id="IntMap" type="java.lang.Integer" ></resultMap>
+    <resultMap id="StrMap" type="java.lang.String" ></resultMap>
+    <resultMap id="TradeMap" type="Trade" ></resultMap>
+
+    <select id="selecCustomer" resultMap="CustomerMap">
+        SELECT * FROM customer
+        <where>
+            rcon = #{rcon} 
+            <if test="keyword != null and keyword != ''">
+            AND cname LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+    </select>
+
+
+
+
+
+
+
+
+    <select id="PidList" resultMap="IntMap">
+        SELECT pid FROM product
+        <where>
+            rcon = #{rcon}
+            <if test="keyword != null and keyword != ''">
+            AND (
+                pname LIKE CONCAT('%', #{keyword}, '%')
+                OR type LIKE CONCAT('%', #{keyword}, '%')
+            )
+            </if>
+        </where>     
+        
+    </select>
+    
+    <select id="getItemInfo" resultType="ItemInfo">
+        SELECT pid,pcid,pname,type,des,price,item,rcon,pcon FROM product
+        where pid = #{pid}
+    </select>
+
+    <select id="getSrcList" resultMap="StrMap">
+        SELECT url from photo
+        where ppid = #{pid}
+    </select>
+
+
+
+
+    <select id="selectTrade" resultMap="TradeMap">
+        SELECT * from trade 
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <update id = "updateCustomerRcon">
+     update customer set rcon = #{rcon} where cid= #{id}
+    </update>
+
+    <update id = "updateProductRcon">
+     update product set rcon = #{rcon} where pid= #{id}
+    </update>
+
+
+    
+    <delete id = "deleteProduct">
+     delete from product where pid= #{id}
+    </delete>
+
+    <delete id = "deletePTrade">
+     delete from trade where tpid= #{id}
+    </delete>
+
+
+
+
+</mapper>

@@ -1,2 +1,21 @@
-# -Second-hand-product-information-release
-闲置物品信息发布系统
+# 闲置物品信息发布
+---
+>__技术栈：__
+>后端：__springboot+mybatis-plus__
+>前端：__vue+ElementUI__
+>数据库：__Mysql__
+  - - -
+>## 用户
+>- 登陆
+>- 搜索商品
+>- 留言
+>- 修改个人信息
+>- 添加或删除商品
+>- 修改商品信息
+>- 查看请求
+>- 接收并处理请求
+>## 管理员
+>- 审核用户
+>- 审核物品
+---
+_详见document.docx_

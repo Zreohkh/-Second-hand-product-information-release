@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fighter3.mapper.ProductMapper">
+    <resultMap id="ProductMap" type="Product"></resultMap>
+
+    <select id="selectProductPage" resultMap="ProductMap">
+    SELECT * FROM product
+    <where>
+        pcon != 2
+        <if test="pcid != null">
+        AND pcid = #{pcid}
+        </if>
+        <if test="keyword != null and keyword != ''">
+        AND (
+            pname LIKE CONCAT('%', #{keyword}, '%')
+            OR des LIKE CONCAT('%', #{keyword}, '%')
+            OR type LIKE CONCAT('%', #{keyword}, '%')
+            OR item LIKE CONCAT('%', #{keyword}, '%')
+        )
+        </if>
+    </where>
+    </select>
+
+    <update id="updatePcon">
+        UPDATE   product SET pcon = 2 where pid = #{id}
+    </update>
+
+    <update id="updatePconBatch" parameterType="java.util.List">
+        UPDATE product SET pcon = 2 WHERE pid IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <update id="updateRcon" parameterType="java.lang.Integer">
+        UPDATE product SET rcon = 0 WHERE pid = #{id}
+    </update>
+</mapper>

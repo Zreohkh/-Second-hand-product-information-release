@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fighter3.mapper.searchMapper">
+    <resultMap id="IntMap" type="java.lang.Integer" ></resultMap>
+    <resultMap id="StrMap" type="java.lang.String" ></resultMap>
+
+    <select id="countProducts" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM product
+        <where>
+            rcon=1 and pcon = 0 and pcid != #{pcid}
+            and pid not in (SELECT tpid from trade where tfcid = #{pcid} and tcon = 0)
+            <if test="keyword != null and keyword != ''">
+            AND (
+                pname LIKE CONCAT('%', #{keyword}, '%')
+                OR type LIKE CONCAT('%', #{keyword}, '%')
+            )
+            </if>
+        </where>
+    </select>
+
+    <select id="PidList" resultMap="IntMap">
+        SELECT pid FROM product
+        <where>
+            rcon = 1 and pcon = 0 and pcid != #{pcid}
+            and pid not in (SELECT tpid from trade where tfcid = #{pcid} and tcon=0)
+            <if test="keyword != null and keyword != ''">
+            AND (
+                pname LIKE CONCAT('%', #{keyword}, '%')
+                OR type LIKE CONCAT('%', #{keyword}, '%')
+            )
+            </if>
+        </where>
+        LIMIT #{pageSize} OFFSET #{num}
+        
+        
+    </select>
+    
+    <select id="getItemInfo" resultType="ItemInfo">
+        SELECT pid,pname,type,des,price,item,rcon FROM product
+        where pid = #{pid}
+    </select>
+
+    <select id="getSrcList" resultMap="StrMap">
+        SELECT url from photo
+        where ppid = #{pid}
+    </select>
+
+    
+    
+</mapper>
