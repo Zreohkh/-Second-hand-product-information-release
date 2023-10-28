@@ -1,21 +1,20 @@
-# 闲置物品信息发布
+# 使用说明：
+前端frontend:
+- npm install
+- npm run dev
 ---
->__技术栈：__
->后端：__springboot+mybatis-plus__
->前端：__vue+ElementUI__
->数据库：__Mysql__
-  - - -
->## 用户
->- 登陆
->- 搜索商品
->- 留言
->- 修改个人信息
->- 添加或删除商品
->- 修改商品信息
->- 查看请求
->- 接收并处理请求
->## 管理员
->- 审核用户
->- 审核物品
+后端backend：
+- 修改配置文件中的数据库url、username和password。
+- 修改upload.path图片保存路径，路径为static/photo在本机中的绝对路径，路径末尾加'\\'。
 ---
-_详见document.docx_
+数据库:
+- 运行mysql中的sql文件。
+---
+端口：
+- 后端8088
+- 前端8080
+- 确保端口不被占用或者修改端口
+---
+详细设计见documents.docx
+
+
